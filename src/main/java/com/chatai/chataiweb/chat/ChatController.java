@@ -13,7 +13,7 @@ public class ChatController {
     // 메인 페이지 (ChatAI 선택 화면)
     @GetMapping("/")
     public String main() {
-        apiService.callPythonApi(); // api 테스트
+//        apiService.callPythonApi(); // api 테스트
         return "main.html";
     }
 
