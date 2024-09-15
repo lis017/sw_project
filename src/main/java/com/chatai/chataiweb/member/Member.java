@@ -1,4 +1,4 @@
-package com.chatai.chataiweb.user;
+package com.chatai.chataiweb.member;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,20 +9,20 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-public class User {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
-    private String userId;
+    private String username;
 
-    private String userPw;
+    private String password;
 
-    private String userName;
+    private String displayName;
 
-    private LocalDate userBirth;
+    private LocalDate birth;
 
-    private String userNumber;
+    private String number;
 }

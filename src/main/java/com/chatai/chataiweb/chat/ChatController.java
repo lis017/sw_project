@@ -16,10 +16,4 @@ public class ChatController {
 //        apiService.callPythonApi(); // api 테스트
         return "main.html";
     }
-
-    // ChatAI 대화 화면
-    @GetMapping("/chat")
-    public String chat() {
-        return "chat.html";
-    }
 }
