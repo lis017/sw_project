@@ -1,5 +1,6 @@
 package com.chatai.chataiweb.chat;
 
+import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,10 @@ public class APIService {
         // 로그인 여부 확인
         if (username == null) {
             System.out.println("비로그인임");
+            System.out.println("질문 : " + question);
         } else {
-            System.out.println("로그인임");
+            System.out.println(username + "님의 로그인임");
+            System.out.println("질문 : " + question);
         }
         
         
@@ -32,15 +35,13 @@ public class APIService {
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(requestData, headers);
 
-//        System.out.println(question);
-//        System.out.println(request);
 
-
-//        // Python 서버에 POST 요청
-//        String url = "http://127.0.0.1:5000/process";
+//        // 챗봇 API에 질문 전달 (요청)
+//        String url = "http://127.0.0.1:5000/question"; // API URL
+//        // 요청 후 받은 응답 저장
 //        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
 //
-//        // Python으로부터 받은 응답 출력
+//        // 챗봇 API으로부터 받은 응답 출력
 //        System.out.println("Response from Python: " + response.getBody());
     }
 }
