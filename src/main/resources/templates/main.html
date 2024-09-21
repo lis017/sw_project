@@ -36,7 +36,7 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h1 class="logo_popup">LOGO DESIGN</h1>
-            <form action="/login" method="POST">
+            <form action="/login" method="POST" id="loginForm">
                 <div class="int-area">
                     <input type="text" name="username" id="id" autocomplete="off" required>
                     <label for="id">아이디</label>
@@ -77,7 +77,7 @@
             }
 
             if (valid) {
-                $('form').submit();
+                $('#loginForm').submit();
             }
         });
     </script>
@@ -86,11 +86,11 @@
         <div class="con">
             <div class="img-list-box">
                 <ul class="inline-grid">
-                    <li><a href="/chat"><img class="img" src="그림2.jpg"></a></li>
-                    <li><a href="/chat"><img class="img" src="그림2.jpg"></a></li>
-                    <li><a href="/chat"><img class="img" src="그림2.jpg"></a></li>
-                    <li><a href="/chat"><img class="img" src="그림2.jpg"></a></li>
-                    <li><a href="/chat"><img class="img" src="그림2.jpg"></a></li>
+                    <li><a href="/"><img class="img" src="그림2.jpg"></a></li>
+                    <li><a href="/"><img class="img" src="그림2.jpg"></a></li>
+                    <li><a href="/"><img class="img" src="그림2.jpg"></a></li>
+                    <li><a href="/"><img class="img" src="그림2.jpg"></a></li>
+                    <li><a href="/"><img class="img" src="그림2.jpg"></a></li>
                 </ul>
             </div>
         </div>
@@ -115,6 +115,21 @@
             }
         }
     </script>
+
+<!--  임시 유저 입력창  -->
+    <section>
+        <form action="/question" method="POST" id="questionForm">
+            <div>
+                <span sec:authorize="isAuthenticated()">
+                    <input type="hidden" name="username" id="username" th:value="${#authentication.principal.username}">
+                </span>
+                <input type="text" name="question" id="question" autocomplete="off" required>
+            </div>
+            <div>
+                <button type="submit">질문</button>
+            </div>
+        </form>
+    </section>
 
 </body>
 </html>

@@ -15,14 +15,16 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, length = 20)
     private String username;
 
     private String password;
 
+    @Column(length = 20)
     private String displayName;
 
     private LocalDate birth;
 
+    @Column(length = 20)
     private String number;
 }
