@@ -36,12 +36,12 @@ public class APIService {
         HttpEntity<Map<String, String>> request = new HttpEntity<>(requestData, headers);
 
 
-//        // 챗봇 API에 질문 전달 (요청)
-//        String url = "http://127.0.0.1:5000/question"; // API URL
-//        // 요청 후 받은 응답 저장
-//        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
-//
-//        // 챗봇 API으로부터 받은 응답 출력
-//        System.out.println("Response from Python: " + response.getBody());
+        // 챗봇 API에 질문 전달 (요청)
+        String url = "http://127.0.0.1:5000/process"; // API URL
+        // 요청 후 받은 응답 저장
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+
+        // 챗봇 API으로부터 받은 응답 출력
+        System.out.println("Response from Python: " + response.getBody());
     }
 }
