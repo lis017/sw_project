@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Service
 public class APIService {
-    public void callPythonApi(String username, String question) {
+    public String callPythonApi(String username, String question) {
 
         // 로그인 여부 확인
         if (username == null) {
@@ -43,16 +43,20 @@ public class APIService {
         // 요청 후 받은 응답 저장
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
 
+        String answer = "";
+
         try {
             // json으로 유니코드 이스퀘이프를 문자열로 변환
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> map = mapper.readValue(response.getBody(), Map.class);
 
-            // 챗봇 API으로부터 받은 응답 출력
-            System.out.println("Response from Python: " + map.get("response"));
+            // 챗봇 API으로부터 받은 응답 저장
+            answer = (String) map.get("response");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return answer;
     }
 }
