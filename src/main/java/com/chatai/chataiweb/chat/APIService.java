@@ -1,11 +1,13 @@
 package com.chatai.chataiweb.chat;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +43,16 @@ public class APIService {
         // 요청 후 받은 응답 저장
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
 
-        // 챗봇 API으로부터 받은 응답 출력
-        System.out.println("Response from Python: " + response.getBody());
+        try {
+            // json으로 유니코드 이스퀘이프를 문자열로 변환
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = mapper.readValue(response.getBody(), Map.class);
+
+            // 챗봇 API으로부터 받은 응답 출력
+            System.out.println("Response from Python: " + map.get("response"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
