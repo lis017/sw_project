@@ -20,7 +20,10 @@ public class ChatController {
     // 챗봇 서비스
     @PostMapping("/question")
     public String chat(String username, String question) {
-        apiService.callPythonApi(username, question); // 챗봇 api 호출
+        String answer = apiService.callPythonApi(username, question); // 챗봇 api 호출
+
+        // 챗봇 api 대답 출력
+        System.out.println("응답 : " + answer);
 
         return "redirect:/";
     }
