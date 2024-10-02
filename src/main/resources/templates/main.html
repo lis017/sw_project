@@ -9,12 +9,11 @@
 </head>
 
 <body>
-
     <section>
         <header class="top-bar">
             <div class="con">
                 <div class="top-bar_left-box">
-                    <h1 class="top-bar_logo">LOGO DESIGN</h1>
+                    <h1 class="top-bar_logo">RecipeBox</h1>
                 </div>
                 <div class="top-bar_right-box">
                     <span sec:authorize="isAuthenticated()">
@@ -27,6 +26,9 @@
                     <nav sec:authorize="isAnonymous()" class="top-bar_menu-box-1">
                         <a href="/register" class="block" id="registerButton">회원가입</a>
                     </nav>
+                    <nav sec:authorize="isAuthenticated()" class="top-bar_menu-box-1">
+                        <a href="mypage.html" class="block" id="mypageButton">마이페이지</a>
+                    </nav>
                 </div>
             </div>
         </header>
@@ -35,7 +37,7 @@
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h1 class="logo_popup">LOGO DESIGN</h1>
+            <h1 class="logo_popup">RecipeBox</h1>
             <form action="/login" method="POST" id="loginForm">
                 <div class="int-area">
                     <input type="text" name="username" id="id" autocomplete="off" required>
@@ -82,20 +84,6 @@
         });
     </script>
 
-    <section class="section-1 con-min-width">
-        <div class="con">
-            <div class="img-list-box">
-                <ul class="inline-grid">
-                    <li><a href="/"><img class="img" src="그림2.jpg"></a></li>
-                    <li><a href="/"><img class="img" src="그림2.jpg"></a></li>
-                    <li><a href="/"><img class="img" src="그림2.jpg"></a></li>
-                    <li><a href="/"><img class="img" src="그림2.jpg"></a></li>
-                    <li><a href="/"><img class="img" src="그림2.jpg"></a></li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
     <script>
         var modal = document.getElementById("loginModal");
         var loginButton = document.getElementById("loginButton");
@@ -116,7 +104,68 @@
         }
     </script>
 
-<!--  임시 유저 입력창  -->
+    <div class="chat-container">
+
+        <div class="chat-box" id="chatBox"></div>
+
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="질문을 입력하세요...">
+            <button id="sendButton">보내기</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+
+        sendButton.addEventListener('click', function () {
+            const userMessage = userInput.value;
+            if (userMessage.trim() !== '') {
+                addMessage(userMessage, 'right');
+                userInput.value = '';
+
+                // 챗봇 응답 시뮬레이션
+                setTimeout(function () {
+                    const botMessage = "챗봇의 응답입니다.";
+                    addMessage(botMessage, 'left');
+                }, 1000);
+            }
+        });
+
+        function addMessage(message, alignment) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            if (alignment === 'right') {
+                messageDiv.classList.add('right');
+                messageDiv.textContent = message;
+            } else {
+                messageDiv.classList.add('left');
+                messageDiv.innerHTML = `${message} <button class="save-button">저장</button>`;
+            }
+
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            if (alignment === 'left') {
+                const saveButton = messageDiv.querySelector('.save-button');
+                saveButton.addEventListener('click', function () {
+                    saveMessage(message);
+                });
+            }
+        }
+
+
+        function saveMessage(message) {
+            let savedMessages = JSON.parse(localStorage.getItem('savedMessages')) || [];
+            savedMessages.push(message);
+            localStorage.setItem('savedMessages', JSON.stringify(savedMessages));
+            alert('메시지가 저장되었습니다.');
+        }
+
+    </script>
+
+    <!--  임시 유저 입력창  -->
     <section>
         <form action="/question" method="POST" id="questionForm">
             <div>
