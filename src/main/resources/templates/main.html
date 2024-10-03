@@ -9,6 +9,8 @@
 </head>
 
 <body>
+
+    <!-- 탑바 -->
     <section>
         <header class="top-bar">
             <div class="con">
@@ -34,6 +36,7 @@
         </header>
     </section>
 
+    <!-- 로그인 창 -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -104,11 +107,15 @@
         }
     </script>
 
+    <!-- 유저 입력 창 -->
     <div class="chat-container">
 
         <div class="chat-box" id="chatBox"></div>
 
         <div class="input-container">
+            <span sec:authorize="isAuthenticated()">
+                <input type="hidden" name="username" id="username" th:value="${#authentication.principal.username}">
+            </span>
             <input type="text" id="userInput" placeholder="질문을 입력하세요...">
             <button id="sendButton">보내기</button>
         </div>
@@ -119,17 +126,36 @@
         const userInput = document.getElementById('userInput');
         const sendButton = document.getElementById('sendButton');
 
+        // 로그인 확인 여부
+        const usernameElement = document.getElementById('username');
+        let username = null;
+        if (usernameElement != null) {
+            username = usernameElement.value;
+        }
+
         sendButton.addEventListener('click', function () {
             const userMessage = userInput.value;
             if (userMessage.trim() !== '') {
                 addMessage(userMessage, 'right');
                 userInput.value = '';
 
-                // 챗봇 응답 시뮬레이션
-                setTimeout(function () {
-                    const botMessage = "챗봇의 응답입니다.";
-                    addMessage(botMessage, 'left');
-                }, 1000);
+                // ajax 요청
+                fetch('/question', {
+                    method : 'POST',
+                    headers : { 'Content-Type' : 'application/json' },
+                    body : JSON.stringify({
+                        username : username,
+                        question : userMessage
+                    })
+                }).then(response => response.json()).then(data => {
+                    console.log('서버 응답 : ', data.response);
+
+                    // 챗봇 응답 시뮬레이션
+                    setTimeout(function () {
+                        const botMessage = data.response;
+                        addMessage(botMessage, 'left');
+                    }, 1000);
+                })
             }
         });
 
@@ -164,21 +190,6 @@
         }
 
     </script>
-
-    <!--  임시 유저 입력창  -->
-    <section>
-        <form action="/question" method="POST" id="questionForm">
-            <div>
-                <span sec:authorize="isAuthenticated()">
-                    <input type="hidden" name="username" id="username" th:value="${#authentication.principal.username}">
-                </span>
-                <input type="text" name="question" id="question" autocomplete="off" required>
-            </div>
-            <div>
-                <button type="submit">질문</button>
-            </div>
-        </form>
-    </section>
 
 </body>
 </html>

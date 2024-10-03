@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Service
 public class APIService {
-    public String callPythonApi(String username, String question) {
+    public Map<String, Object> callPythonApi(String username, String question) {
 
         // 로그인 여부 확인
         if (username == null) {
@@ -23,8 +23,8 @@ public class APIService {
             System.out.println(username + "님의 로그인임");
             System.out.println("질문 : " + question);
         }
-        
-        
+
+
         RestTemplate restTemplate = new RestTemplate();
 
         // 전송할 데이터 준비
@@ -43,7 +43,7 @@ public class APIService {
         // 요청 후 받은 응답 저장
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
 
-        String answer = "";
+        Map<String, Object> answer = null;
 
         try {
             // json으로 유니코드 이스퀘이프를 문자열로 변환
@@ -51,7 +51,7 @@ public class APIService {
             Map<String, Object> map = mapper.readValue(response.getBody(), Map.class);
 
             // 챗봇 API으로부터 받은 응답 저장
-            answer = (String) map.get("response");
+            answer = map;
 
         } catch (Exception e) {
             e.printStackTrace();

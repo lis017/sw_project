@@ -38,7 +38,7 @@ public class MyUserDetailsService implements UserDetailsService {
         }
 
         // 유저의 로그인 정보
-        var customUser = new User(user.getDisplayName(), user.getPassword(), authorities);
+        var customUser = new User(user.getUsername(), user.getPassword(), authorities);
         
         // Authentication 삽입
         return customUser;

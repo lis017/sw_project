@@ -4,6 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,12 +23,15 @@ public class ChatController {
 
     // 챗봇 서비스
     @PostMapping("/question")
-    public String chat(String username, String question) {
-        String answer = apiService.callPythonApi(username, question); // 챗봇 api 호출
+    @ResponseBody
+    public Map<String, Object> chat(@RequestBody Map<String, Object> data) {
+        String username = (String) data.get("username");
+        String question = (String) data.get("question");
+        Map<String, Object> answer = apiService.callPythonApi(username, question); // 챗봇 api 호출
 
         // 챗봇 api 대답 출력
         System.out.println("응답 : " + answer);
 
-        return "redirect:/";
+        return answer;
     }
 }
