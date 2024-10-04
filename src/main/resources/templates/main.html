@@ -10,11 +10,12 @@
 
 <body>
 
+    <!-- 탑바 -->
     <section>
         <header class="top-bar">
             <div class="con">
                 <div class="top-bar_left-box">
-                    <h1 class="top-bar_logo">LOGO DESIGN</h1>
+                    <h1 class="top-bar_logo">RecipeBox</h1>
                 </div>
                 <div class="top-bar_right-box">
                     <span sec:authorize="isAuthenticated()">
@@ -27,16 +28,20 @@
                     <nav sec:authorize="isAnonymous()" class="top-bar_menu-box-1">
                         <a href="/register" class="block" id="registerButton">회원가입</a>
                     </nav>
+                    <nav sec:authorize="isAuthenticated()" class="top-bar_menu-box-1">
+                        <a href="mypage.html" class="block" id="mypageButton">마이페이지</a>
+                    </nav>
                 </div>
             </div>
         </header>
     </section>
 
+    <!-- 로그인 창 -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h1 class="logo_popup">LOGO DESIGN</h1>
-            <form action="/login" method="POST">
+            <h1 class="logo_popup">RecipeBox</h1>
+            <form action="/login" method="POST" id="loginForm">
                 <div class="int-area">
                     <input type="text" name="username" id="id" autocomplete="off" required>
                     <label for="id">아이디</label>
@@ -77,24 +82,10 @@
             }
 
             if (valid) {
-                $('form').submit();
+                $('#loginForm').submit();
             }
         });
     </script>
-
-    <section class="section-1 con-min-width">
-        <div class="con">
-            <div class="img-list-box">
-                <ul class="inline-grid">
-                    <li><a href="/chat"><img class="img" src="그림2.jpg"></a></li>
-                    <li><a href="/chat"><img class="img" src="그림2.jpg"></a></li>
-                    <li><a href="/chat"><img class="img" src="그림2.jpg"></a></li>
-                    <li><a href="/chat"><img class="img" src="그림2.jpg"></a></li>
-                    <li><a href="/chat"><img class="img" src="그림2.jpg"></a></li>
-                </ul>
-            </div>
-        </div>
-    </section>
 
     <script>
         var modal = document.getElementById("loginModal");
@@ -114,6 +105,94 @@
                 modal.style.display = "none";
             }
         }
+    </script>
+
+    <!-- 유저 입력 창 -->
+    <div class="chat-container">
+
+        <div class="chat-box" id="chatBox"></div>
+
+        <div class="input-container">
+            <span sec:authorize="isAuthenticated()">
+                <input type="hidden" name="username" id="username" th:value="${#authentication.principal.username}">
+            </span>
+            <input type="text" id="userInput" placeholder="질문을 입력하세요...">
+            <button id="sendButton">보내기</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // 로그인 확인 여부
+        const usernameElement = document.getElementById('username');
+        let username = null;
+        if (usernameElement != null) {
+            username = usernameElement.value;
+        }
+
+        sendButton.addEventListener('click', function () {
+            const userMessage = userInput.value;
+            if (userMessage.trim() !== '') {
+                addMessage(userMessage, 'right');
+                userInput.value = '';
+
+                // ajax 요청
+                fetch('/question', {
+                    method : 'POST',
+                    headers : { 'Content-Type' : 'application/json' },
+                    body : JSON.stringify({
+                        username : username,
+                        question : userMessage
+                    })
+                }).then(response => response.json()).then(data => {
+                    console.log('서버 응답 : ', data.response);
+
+                    // 챗봇 응답 시뮬레이션
+                    setTimeout(function () {
+                        const botMessage = data.response;
+                        addMessage(botMessage, 'left');
+                    }, 1000);
+                })
+            }
+        });
+
+        //alignment로 메시지 왼쪽에서뭐 할지, 오른쪽에서 뭐 할지
+        function addMessage(message, alignment) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            //이건 메시지 표시인듯 (저장x)
+            if (alignment === 'right') {
+                messageDiv.classList.add('right');
+                //질문 메시지 추가인듯?
+                messageDiv.textContent = message;
+            } else {
+                messageDiv.classList.add('left');
+                messageDiv.innerHTML = `${message} <button class="save-button">저장</button>`;
+            }
+
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            //저장기능쪽
+            if (alignment === 'left') {
+                const saveButton = messageDiv.querySelector('.save-button');
+                saveButton.addEventListener('click', function () {
+                    saveMessage(message);
+                });
+            }
+        }
+
+
+        function saveMessage(message) {
+            let savedMessages = JSON.parse(localStorage.getItem('savedMessages')) || [];
+            savedMessages.push(message);
+            localStorage.setItem('savedMessages', JSON.stringify(savedMessages));
+            alert('메시지가 저장되었습니다.');
+        }
+
     </script>
 
 </body>

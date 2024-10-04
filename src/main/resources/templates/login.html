@@ -10,9 +10,9 @@
   <body>
 
     <section class="login-form">
-      <h1>LOGO DESIGN</h1>
+      <h1>RecipeBox</h1>
 
-      <form action="/login" method="POST">
+      <form action="/login" method="POST" id="loginForm">
         <div class="int-area">
           <input type="text" name="username" id="id" autocomplete="off" required>
           <label for="id">아이디</label>
@@ -62,7 +62,7 @@
           }
 
           if (valid) {
-              $('form').submit();
+              $('#loginForm').submit();
           }
       });
     </script>
