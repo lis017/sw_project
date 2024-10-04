@@ -159,11 +159,14 @@
             }
         });
 
+        //alignment로 메시지 왼쪽에서뭐 할지, 오른쪽에서 뭐 할지
         function addMessage(message, alignment) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message');
+            //이건 메시지 표시인듯 (저장x)
             if (alignment === 'right') {
                 messageDiv.classList.add('right');
+                //질문 메시지 추가인듯?
                 messageDiv.textContent = message;
             } else {
                 messageDiv.classList.add('left');
@@ -173,6 +176,7 @@
             chatBox.appendChild(messageDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
 
+            //저장기능쪽
             if (alignment === 'left') {
                 const saveButton = messageDiv.querySelector('.save-button');
                 saveButton.addEventListener('click', function () {
