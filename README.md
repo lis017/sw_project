@@ -24,4 +24,4 @@
   ai든 뭐든 하면 할수 있다는 자신감을 얻었습니다.
   <br>
   <br>
-//mysql호스팅받아, azure로 사용
+//mysql호스팅받아, azure로 사용. open ai 사용
